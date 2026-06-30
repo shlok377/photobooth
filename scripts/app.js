@@ -5,6 +5,7 @@ const appState = {
   currentShotIndex: 0,
   capturedPhotos: [],
   customText: "",
+  filter: "none",
   status: "idle" // idle, counting, review, done
 };
 
@@ -16,20 +17,27 @@ const els = {
   btnRetake: document.getElementById('btn-retake'),
   btnKeep: document.getElementById('btn-keep'),
   btnDownload: document.getElementById('btn-download'),
+  btnRestart: document.getElementById('btn-restart'),
   controlsIdle: document.getElementById('controls-idle'),
   controlsReview: document.getElementById('controls-review'),
   controlsDone: document.getElementById('controls-done'),
   errorMsg: document.getElementById('error-message'),
   countdown: document.getElementById('countdown-display'),
   layoutRadios: document.querySelectorAll('input[name="layout"]'),
+  filterRadios: document.querySelectorAll('input[name="filter"]'),
   shots1Radios: document.querySelectorAll('input[name="shots1"]'),
   shots2Radios: document.querySelectorAll('input[name="shots2"]'),
   shots1Container: document.getElementById('shots-1col'),
-  shots2Container: document.getElementById('shots-2col')
+  shots2Container: document.getElementById('shots-2col'),
+  layoutPreview: document.getElementById('layout-preview'),
+  timelineTray: document.getElementById('timeline-tray'),
+  lightboxOverlay: document.getElementById('lightbox-overlay'),
+  lightboxImg: document.getElementById('lightbox-img')
 };
 
 // Initialize App
 async function initApp() {
+  updatePreviewVisualizer();
   try {
     await initCamera(els.video);
     // Camera is ready
@@ -54,10 +62,14 @@ function updateUI() {
   
   if (appState.status === 'idle') {
     els.controlsIdle.classList.remove('hidden');
-  } else if (appState.status === 'review') {
-    els.controlsReview.classList.remove('hidden');
-  } else if (appState.status === 'done') {
-    els.controlsDone.classList.remove('hidden');
+    els.btnRestart.classList.add('hidden');
+  } else {
+    els.btnRestart.classList.remove('hidden');
+    if (appState.status === 'review') {
+      els.controlsReview.classList.remove('hidden');
+    } else if (appState.status === 'done') {
+      els.controlsDone.classList.remove('hidden');
+    }
   }
 }
 
@@ -80,20 +92,24 @@ els.btnDownload.addEventListener('click', () => {
   triggerDownload();
 });
 
+els.btnRestart.addEventListener('click', () => {
+  resetSession();
+});
+
 // Config Event Listeners
 els.layoutRadios.forEach(radio => {
   radio.addEventListener('change', (e) => {
     appState.columns = parseInt(e.target.value);
     if (appState.columns === 1) {
-      els.shots1Container.classList.remove('hidden');
-      els.shots2Container.classList.add('hidden');
+      els.shots1Container.classList.remove('hide-stack');
+      els.shots2Container.classList.add('hide-stack');
       
       // Update state to match selected 1-col option
       const selected = document.querySelector('input[name="shots1"]:checked').value;
       appState.totalShots = parseInt(selected);
     } else {
-      els.shots1Container.classList.add('hidden');
-      els.shots2Container.classList.remove('hidden');
+      els.shots1Container.classList.add('hide-stack');
+      els.shots2Container.classList.remove('hide-stack');
       
       // Update state to match selected 2-col option
       let selected = document.querySelector('input[name="shots2"]:checked');
@@ -104,6 +120,21 @@ els.layoutRadios.forEach(radio => {
       }
       appState.totalShots = parseInt(selected.value);
     }
+    updatePreviewVisualizer();
+  });
+});
+
+els.filterRadios.forEach(radio => {
+  radio.addEventListener('change', (e) => {
+    appState.filter = e.target.value;
+    
+    // update live video preview classes
+    els.video.classList.remove('filter-bw', 'filter-vintage');
+    if (appState.filter === 'bw') {
+      els.video.classList.add('filter-bw');
+    } else if (appState.filter === 'vintage') {
+      els.video.classList.add('filter-vintage');
+    }
   });
 });
 
@@ -111,6 +142,7 @@ els.shots1Radios.forEach(radio => {
   radio.addEventListener('change', (e) => {
     if (appState.columns === 1) {
       appState.totalShots = parseInt(e.target.value);
+      updatePreviewVisualizer();
     }
   });
 });
@@ -119,9 +151,43 @@ els.shots2Radios.forEach(radio => {
   radio.addEventListener('change', (e) => {
     if (appState.columns === 2) {
       appState.totalShots = parseInt(e.target.value);
+      updatePreviewVisualizer();
     }
   });
 });
+
+function updatePreviewVisualizer() {
+  els.layoutPreview.className = `layout-preview col-${appState.columns}`;
+  els.layoutPreview.innerHTML = ''; // clear old
+  
+  for(let i = 0; i < appState.totalShots; i++) {
+    const box = document.createElement('div');
+    box.className = 'preview-box';
+    els.layoutPreview.appendChild(box);
+  }
+  gsap.fromTo(els.layoutPreview.children, 
+    { scale: 0.5, opacity: 0 }, 
+    { scale: 1, opacity: 1, duration: 0.5, stagger: 0.05, ease: "back.out(1.7)" }
+  );
+}
+
+// Lightbox logic
+els.lightboxOverlay.addEventListener('click', () => {
+  els.lightboxOverlay.classList.remove('active');
+  setTimeout(() => {
+    els.lightboxOverlay.classList.add('hidden');
+    els.lightboxImg.src = "";
+  }, 300);
+});
+
+function openLightbox(src) {
+  els.lightboxImg.src = src;
+  els.lightboxOverlay.classList.remove('hidden');
+  // slight delay to allow display:block before opacity transition
+  requestAnimationFrame(() => {
+    els.lightboxOverlay.classList.add('active');
+  });
+}
 
 // Boot
 window.addEventListener('DOMContentLoaded', initApp);

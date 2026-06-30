@@ -17,6 +17,9 @@
                 <video id="camera-feed" autoplay playsinline class="hidden"></video>
                 <div id="countdown-display" class="hidden"></div>
             </div>
+            
+            <div class="timeline-tray hidden" id="timeline-tray"></div>
+            
             <p class="privacy-notice">
                 Your privacy is guaranteed. All photos are processed entirely on your device and are never uploaded or stored on any external servers.
             </p>
@@ -32,6 +35,16 @@
 
             <div id="controls-idle">
                 <div class="config-panel">
+                    <h3>Filter</h3>
+                    <div class="custom-select-wrapper" id="filter-toggles">
+                        <select id="filter-dropdown" class="custom-select">
+                            <option value="none" selected>Normal</option>
+                            <option value="bw">Black & White</option>
+                            <option value="vintage">Vintage</option>
+                            <option value="polaroid">Polaroid</option>
+                        </select>
+                    </div>
+
                     <h3>Layout</h3>
                     <div class="toggle-group" id="layout-toggles">
                         <label><input type="radio" name="layout" value="1" checked> <span>1 Column</span></label>
@@ -39,13 +52,20 @@
                     </div>
                     
                     <h3>Photos</h3>
-                    <div class="toggle-group" id="shots-1col">
-                        <label><input type="radio" name="shots1" value="3" checked> <span>3 Shots</span></label>
-                        <label><input type="radio" name="shots1" value="4"> <span>4 Shots</span></label>
+                    <div class="shots-stack">
+                        <div class="toggle-group" id="shots-1col">
+                            <label><input type="radio" name="shots1" value="3" checked> <span>3 Shots</span></label>
+                            <label><input type="radio" name="shots1" value="4"> <span>4 Shots</span></label>
+                        </div>
+                        <div class="toggle-group hide-stack" id="shots-2col">
+                            <label><input type="radio" name="shots2" value="6"> <span>6 Shots</span></label>
+                            <label><input type="radio" name="shots2" value="8"> <span>8 Shots</span></label>
+                        </div>
                     </div>
-                    <div class="toggle-group hidden" id="shots-2col">
-                        <label><input type="radio" name="shots2" value="6"> <span>6 Shots</span></label>
-                        <label><input type="radio" name="shots2" value="8"> <span>8 Shots</span></label>
+
+                    <h3>Preview</h3>
+                    <div class="layout-preview-wrapper">
+                        <div id="layout-preview" class="layout-preview col-1"></div>
                     </div>
                 </div>
 
@@ -61,10 +81,16 @@
                 <button class="btn-primary" id="btn-download">DOWNLOAD STRIP</button>
             </div>
 
+            <button class="btn-primary hidden" id="btn-restart" style="margin-top: 1rem; background-color: transparent; border: 2px solid var(--text-light); color: var(--text-light); box-shadow: none;">NEW SESSION</button>
+
             <div class="photo-strip" id="photo-strip-preview">
                 <canvas id="strip-canvas"></canvas>
             </div>
         </section>
+    </div>
+
+    <div class="lightbox-overlay hidden" id="lightbox-overlay">
+        <img src="" id="lightbox-img" alt="Preview">
     </div>
 
     <script src="scripts/animations.js"></script>

@@ -69,8 +69,8 @@ function finalizeStripDrawing() {
   
   // Slide up animation using GSAP
   gsap.fromTo(stripPreview, 
-    { y: 200, opacity: 0, rotation: -2 },
-    { y: 0, opacity: 1, rotation: 0, duration: 0.8, ease: "power3.out" }
+    { y: 200, opacity: 0, rotation: -4, scale: 0.9 },
+    { y: 0, opacity: 1, rotation: 0, scale: 1, duration: 1, ease: "elastic.out(1, 0.7)" }
   );
 }
 
