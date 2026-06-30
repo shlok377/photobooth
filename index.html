@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analog Photobooth</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+</head>
+<body>
+    <div class="flash-overlay" id="flash-overlay"></div>
+    
+    <div class="app-container">
+        <section class="camera-section">
+            <div class="video-wrapper">
+                <div class="skeleton skeleton-camera" id="camera-skeleton"></div>
+                <video id="camera-feed" autoplay playsinline class="hidden"></video>
+                <div id="countdown-display" class="hidden"></div>
+            </div>
+            <p class="privacy-notice">
+                Your privacy is guaranteed. All photos are processed entirely on your device and are never uploaded or stored on any external servers.
+            </p>
+        </section>
+
+        <section class="controls-section">
+            <header>
+                <h1>Analog Photobooth</h1>
+                <p>Capture your moments, retro style.</p>
+            </header>
+
+            <div class="error-message" id="error-message"></div>
+
+            <div id="controls-idle">
+                <button class="btn-primary" id="btn-start" disabled>START SESSION</button>
+            </div>
+
+            <div id="controls-review" class="hidden">
+                <button class="btn-primary" id="btn-retake">RETAKE</button>
+                <button class="btn-primary" id="btn-keep">KEEP</button>
+            </div>
+
+            <div id="controls-done" class="hidden">
+                <button class="btn-primary" id="btn-download">DOWNLOAD STRIP</button>
+            </div>
+
+            <div class="photo-strip" id="photo-strip-preview">
+                <canvas id="strip-canvas"></canvas>
+            </div>
+        </section>
+    </div>
+
+    <script src="scripts/animations.js"></script>
+    <script src="scripts/camera.js"></script>
+    <script src="scripts/canvas.js"></script>
+    <script src="scripts/session.js"></script>
+    <script src="scripts/app.js"></script>
+</body>
+</html>
