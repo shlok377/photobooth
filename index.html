@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cozybooth</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+</head>
+<body>
+    <div class="flash-overlay" id="flash-overlay"></div>
+    
+    <div class="app-container">
+        <section class="camera-section">
+            <div class="video-wrapper">
+                <div class="skeleton skeleton-camera" id="camera-skeleton"></div>
+                <video id="camera-feed" autoplay playsinline class="hidden"></video>
+                <div id="countdown-display" class="hidden"></div>
+            </div>
+            
+            <div class="timeline-tray hidden" id="timeline-tray"></div>
+            
+            <p class="privacy-notice">
+                Your privacy is guaranteed. All photos are processed entirely on your device and are never uploaded or stored on any external servers.
+            </p>
+        </section>
+
+        <section class="controls-section">
+            <header>
+                <h1>Cozybooth</h1>
+                <p>Capture your moments, retro style.</p>
+            </header>
+
+            <div class="error-message" id="error-message"></div>
+
+            <div id="controls-idle">
+                <div class="config-panel">
+                    <h3>Filter</h3>
+                    <div class="custom-select-wrapper" id="filter-toggles">
+                        <select id="filter-dropdown" class="custom-select">
+                            <option value="none" selected>Normal</option>
+                            <option value="bw">Black & White</option>
+                            <option value="vintage">Vintage</option>
+                            <option value="polaroid">Polaroid</option>
+                        </select>
+                    </div>
+
+                    <h3>Layout</h3>
+                    <div class="toggle-group" id="layout-toggles">
+                        <label><input type="radio" name="layout" value="1" checked> <span>1 Column</span></label>
+                        <label><input type="radio" name="layout" value="2"> <span>2 Columns</span></label>
+                    </div>
+                    
+                    <h3>Photos</h3>
+                    <div class="shots-stack">
+                        <div class="toggle-group" id="shots-1col">
+                            <label><input type="radio" name="shots1" value="3" checked> <span>3 Shots</span></label>
+                            <label><input type="radio" name="shots1" value="4"> <span>4 Shots</span></label>
+                        </div>
+                        <div class="toggle-group hide-stack" id="shots-2col">
+                            <label><input type="radio" name="shots2" value="6"> <span>6 Shots</span></label>
+                            <label><input type="radio" name="shots2" value="8"> <span>8 Shots</span></label>
+                        </div>
+                    </div>
+
+                    <h3>Preview</h3>
+                    <div class="layout-preview-wrapper">
+                        <div id="layout-preview" class="layout-preview col-1"></div>
+                    </div>
+                </div>
+
+                <button class="btn-primary" id="btn-start" disabled>START SESSION</button>
+            </div>
+
+            <div id="controls-review" class="hidden">
+                <button class="btn-primary" id="btn-retake">RETAKE</button>
+                <button class="btn-primary" id="btn-keep">KEEP</button>
+            </div>
+
+            <div id="controls-done" class="hidden">
+                <button class="btn-primary" id="btn-download">DOWNLOAD STRIP</button>
+            </div>
+
+            <button class="btn-primary btn-outline hidden" id="btn-restart" style="margin-top: 1rem;">NEW SESSION</button>
+
+            <div class="photo-strip" id="photo-strip-preview">
+                <canvas id="strip-canvas"></canvas>
+            </div>
+        </section>
+    </div>
+
+    <div class="lightbox-overlay hidden" id="lightbox-overlay">
+        <div class="lightbox-content">
+            <img src="" id="lightbox-img" alt="Preview">
+            <div class="lightbox-controls">
+                <button class="btn-primary" id="btn-lightbox-close">CLOSE</button>
+                <button class="btn-primary btn-outline" id="btn-lightbox-remove">REMOVE</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="scripts/animations.js"></script>
+    <script src="scripts/camera.js"></script>
+    <script src="scripts/canvas.js"></script>
+    <script src="scripts/session.js"></script>
+    <script src="scripts/app.js"></script>
+</body>
+</html>
