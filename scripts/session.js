@@ -107,6 +107,7 @@ function handleContinue() {
 function finishSession() {
   appState.status = 'done';
   els.video.classList.add('hidden');
+  els.videoWrapper.classList.add('hidden');
   updateUI();
   
   // Trigger canvas generation
@@ -127,6 +128,7 @@ function resetSession() {
   // Clean up UI from finished state
   document.getElementById('photo-strip-preview').style.display = 'none';
   els.video.classList.remove('hidden');
+  els.videoWrapper.classList.remove('hidden');
   els.timelineTray.classList.add('hidden');
   els.timelineTray.innerHTML = '';
   resumeVideo();
@@ -171,6 +173,7 @@ window.removePhotoFromSession = function(index) {
   if (appState.status === 'done') {
     document.getElementById('photo-strip-preview').style.display = 'none';
     els.video.classList.remove('hidden');
+    els.videoWrapper.classList.remove('hidden');
     els.timelineTray.classList.remove('hidden');
     resumeVideo();
     startShotLoop();
