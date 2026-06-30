@@ -115,6 +115,13 @@ header p {
   border-radius: 4px;
   box-shadow: var(--shadow-paper);
   display: none;
+  max-width: 100%;
+}
+
+.photo-strip canvas {
+  width: 100%;
+  height: auto;
+  display: block;
 }
 
 .skeleton {

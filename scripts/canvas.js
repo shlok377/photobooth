@@ -7,12 +7,12 @@ function generateStrip() {
   if (photos.length === 0) return;
   
   // Define layout
-  const padding = 40;
-  const spacing = 20;
-  const photoWidth = 600;
-  const photoHeight = 450; // 4:3 aspect ratio
+  const padding = 80;
+  const spacing = 40;
+  const photoWidth = 1200;
+  const photoHeight = 900; // 4:3 aspect ratio
   
-  const bottomTextSpace = 120;
+  const bottomTextSpace = 240;
   
   stripCanvas.width = photoWidth + (padding * 2);
   stripCanvas.height = (padding * 2) + (photos.length * photoHeight) + ((photos.length - 1) * spacing) + bottomTextSpace;
@@ -49,10 +49,10 @@ function generateStrip() {
 
 function finalizeStripDrawing() {
   // Draw text at the bottom
-  const textY = stripCanvas.height - 50;
+  const textY = stripCanvas.height - 100;
   
   stripCtx.fillStyle = '#0A0A0A';
-  stripCtx.font = '700 40px "Playfair Display", serif';
+  stripCtx.font = '700 80px "Playfair Display", serif';
   stripCtx.textAlign = 'center';
   
   const caption = appState.customText || "Analog Photobooth";
