@@ -81,7 +81,7 @@
                 <button class="btn-primary" id="btn-download">DOWNLOAD STRIP</button>
             </div>
 
-            <button class="btn-primary hidden" id="btn-restart" style="margin-top: 1rem; background-color: transparent; border: 2px solid var(--text-light); color: var(--text-light); box-shadow: none;">NEW SESSION</button>
+            <button class="btn-primary btn-outline hidden" id="btn-restart" style="margin-top: 1rem;">NEW SESSION</button>
 
             <div class="photo-strip" id="photo-strip-preview">
                 <canvas id="strip-canvas"></canvas>
@@ -90,7 +90,13 @@
     </div>
 
     <div class="lightbox-overlay hidden" id="lightbox-overlay">
-        <img src="" id="lightbox-img" alt="Preview">
+        <div class="lightbox-content">
+            <img src="" id="lightbox-img" alt="Preview">
+            <div class="lightbox-controls">
+                <button class="btn-primary" id="btn-lightbox-close">CLOSE</button>
+                <button class="btn-primary btn-outline" id="btn-lightbox-remove">REMOVE</button>
+            </div>
+        </div>
     </div>
 
     <script src="scripts/animations.js"></script>

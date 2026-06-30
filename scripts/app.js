@@ -11,6 +11,7 @@ const appState = {
 
 // UI Elements
 const els = {
+  videoWrapper: document.querySelector('.video-wrapper'),
   video: document.getElementById('camera-feed'),
   skeleton: document.getElementById('camera-skeleton'),
   btnStart: document.getElementById('btn-start'),
@@ -24,7 +25,7 @@ const els = {
   errorMsg: document.getElementById('error-message'),
   countdown: document.getElementById('countdown-display'),
   layoutRadios: document.querySelectorAll('input[name="layout"]'),
-  filterRadios: document.querySelectorAll('input[name="filter"]'),
+  filterDropdown: document.getElementById('filter-dropdown'),
   shots1Radios: document.querySelectorAll('input[name="shots1"]'),
   shots2Radios: document.querySelectorAll('input[name="shots2"]'),
   shots1Container: document.getElementById('shots-1col'),
@@ -124,18 +125,20 @@ els.layoutRadios.forEach(radio => {
   });
 });
 
-els.filterRadios.forEach(radio => {
-  radio.addEventListener('change', (e) => {
-    appState.filter = e.target.value;
-    
-    // update live video preview classes
-    els.video.classList.remove('filter-bw', 'filter-vintage');
-    if (appState.filter === 'bw') {
-      els.video.classList.add('filter-bw');
-    } else if (appState.filter === 'vintage') {
-      els.video.classList.add('filter-vintage');
-    }
-  });
+els.filterDropdown.addEventListener('change', (e) => {
+  appState.filter = e.target.value;
+  
+  // update live video preview classes
+  els.video.classList.remove('filter-bw', 'filter-vintage', 'filter-polaroid');
+  els.videoWrapper.classList.remove('vignette-polaroid');
+  if (appState.filter === 'bw') {
+    els.video.classList.add('filter-bw');
+  } else if (appState.filter === 'vintage') {
+    els.video.classList.add('filter-vintage');
+  } else if (appState.filter === 'polaroid') {
+    els.video.classList.add('filter-polaroid');
+    els.videoWrapper.classList.add('vignette-polaroid');
+  }
 });
 
 els.shots1Radios.forEach(radio => {
@@ -172,15 +175,41 @@ function updatePreviewVisualizer() {
 }
 
 // Lightbox logic
-els.lightboxOverlay.addEventListener('click', () => {
+let currentLightboxIndex = -1;
+els.btnLightboxClose = document.getElementById('btn-lightbox-close');
+els.btnLightboxRemove = document.getElementById('btn-lightbox-remove');
+
+els.lightboxOverlay.addEventListener('click', (e) => {
+  if (e.target === els.lightboxOverlay) {
+    closeLightbox();
+  }
+});
+
+els.btnLightboxClose.addEventListener('click', () => {
+  closeLightbox();
+});
+
+els.btnLightboxRemove.addEventListener('click', () => {
+  if (currentLightboxIndex !== -1 && window.removePhotoFromSession) {
+    window.removePhotoFromSession(currentLightboxIndex);
+  }
+  closeLightbox();
+});
+
+function closeLightbox() {
+  if (window.resumeCountdown) window.resumeCountdown();
+  
   els.lightboxOverlay.classList.remove('active');
   setTimeout(() => {
     els.lightboxOverlay.classList.add('hidden');
     els.lightboxImg.src = "";
   }, 300);
-});
+}
 
-function openLightbox(src) {
+window.openLightbox = function(src, index) {
+  if (window.pauseCountdown) window.pauseCountdown();
+  
+  currentLightboxIndex = index;
   els.lightboxImg.src = src;
   els.lightboxOverlay.classList.remove('hidden');
   // slight delay to allow display:block before opacity transition

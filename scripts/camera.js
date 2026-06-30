@@ -44,11 +44,26 @@ function takeSnapshot() {
     ctx.filter = 'grayscale(100%) contrast(110%)';
   } else if (appState && appState.filter === 'vintage') {
     ctx.filter = 'sepia(60%) contrast(120%) brightness(90%) saturate(120%)';
+  } else if (appState && appState.filter === 'polaroid') {
+    ctx.filter = 'contrast(130%) saturate(110%) hue-rotate(10deg) sepia(10%) brightness(105%)';
   } else {
     ctx.filter = 'none';
   }
 
   ctx.drawImage(els.video, 0, 0, captureCanvas.width, captureCanvas.height);
+  ctx.filter = 'none'; // Reset filter so subsequent draws aren't affected
+  
+  // Bake vignette for polaroid
+  if (appState && appState.filter === 'polaroid') {
+    const gradient = ctx.createRadialGradient(
+      captureCanvas.width / 2, captureCanvas.height / 2, captureCanvas.width * 0.3,
+      captureCanvas.width / 2, captureCanvas.height / 2, captureCanvas.width * 0.8
+    );
+    gradient.addColorStop(0, 'rgba(0,0,0,0)');
+    gradient.addColorStop(1, 'rgba(0,0,0,0.6)');
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, captureCanvas.width, captureCanvas.height);
+  }
   
   // Return base64 jpeg (compression 0.8) to prevent localStorage QuotaExceededError
   return captureCanvas.toDataURL('image/jpeg', 0.8);
