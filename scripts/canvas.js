@@ -13,9 +13,11 @@ function generateStrip() {
   const photoHeight = 900; // 4:3 aspect ratio
   
   const bottomTextSpace = 240;
+  const cols = appState.columns;
+  const rows = Math.ceil(photos.length / cols);
   
-  stripCanvas.width = photoWidth + (padding * 2);
-  stripCanvas.height = (padding * 2) + (photos.length * photoHeight) + ((photos.length - 1) * spacing) + bottomTextSpace;
+  stripCanvas.width = (photoWidth * cols) + (spacing * (cols - 1)) + (padding * 2);
+  stripCanvas.height = (padding * 2) + (rows * photoHeight) + ((rows - 1) * spacing) + bottomTextSpace;
   
   // Draw background
   stripCtx.fillStyle = '#FDFBF7';
@@ -30,13 +32,17 @@ function generateStrip() {
     imgObjects.push(img);
     
     img.onload = () => {
-      const yOffset = padding + (i * photoHeight) + (i * spacing);
-      stripCtx.drawImage(img, padding, yOffset, photoWidth, photoHeight);
+      const colIndex = i % appState.columns;
+      const rowIndex = Math.floor(i / appState.columns);
+      const xOffset = padding + (colIndex * photoWidth) + (colIndex * spacing);
+      const yOffset = padding + (rowIndex * photoHeight) + (rowIndex * spacing);
+      
+      stripCtx.drawImage(img, xOffset, yOffset, photoWidth, photoHeight);
       
       // Draw inner border/shadow for vintage feel
       stripCtx.strokeStyle = 'rgba(0,0,0,0.1)';
       stripCtx.lineWidth = 1;
-      stripCtx.strokeRect(padding, yOffset, photoWidth, photoHeight);
+      stripCtx.strokeRect(xOffset, yOffset, photoWidth, photoHeight);
       
       loadedCount++;
       if (loadedCount === photos.length) {

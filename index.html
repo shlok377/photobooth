@@ -31,6 +31,24 @@
             <div class="error-message" id="error-message"></div>
 
             <div id="controls-idle">
+                <div class="config-panel">
+                    <h3>Layout</h3>
+                    <div class="toggle-group" id="layout-toggles">
+                        <label><input type="radio" name="layout" value="1" checked> <span>1 Column</span></label>
+                        <label><input type="radio" name="layout" value="2"> <span>2 Columns</span></label>
+                    </div>
+                    
+                    <h3>Photos</h3>
+                    <div class="toggle-group" id="shots-1col">
+                        <label><input type="radio" name="shots1" value="3" checked> <span>3 Shots</span></label>
+                        <label><input type="radio" name="shots1" value="4"> <span>4 Shots</span></label>
+                    </div>
+                    <div class="toggle-group hidden" id="shots-2col">
+                        <label><input type="radio" name="shots2" value="6"> <span>6 Shots</span></label>
+                        <label><input type="radio" name="shots2" value="8"> <span>8 Shots</span></label>
+                    </div>
+                </div>
+
                 <button class="btn-primary" id="btn-start" disabled>START SESSION</button>
             </div>
 

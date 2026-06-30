@@ -1,6 +1,6 @@
 // State Management
 const appState = {
-  template: '3-shot',
+  columns: 1,
   totalShots: 3,
   currentShotIndex: 0,
   capturedPhotos: [],
@@ -20,7 +20,12 @@ const els = {
   controlsReview: document.getElementById('controls-review'),
   controlsDone: document.getElementById('controls-done'),
   errorMsg: document.getElementById('error-message'),
-  countdown: document.getElementById('countdown-display')
+  countdown: document.getElementById('countdown-display'),
+  layoutRadios: document.querySelectorAll('input[name="layout"]'),
+  shots1Radios: document.querySelectorAll('input[name="shots1"]'),
+  shots2Radios: document.querySelectorAll('input[name="shots2"]'),
+  shots1Container: document.getElementById('shots-1col'),
+  shots2Container: document.getElementById('shots-2col')
 };
 
 // Initialize App
@@ -73,6 +78,49 @@ els.btnKeep.addEventListener('click', () => {
 
 els.btnDownload.addEventListener('click', () => {
   triggerDownload();
+});
+
+// Config Event Listeners
+els.layoutRadios.forEach(radio => {
+  radio.addEventListener('change', (e) => {
+    appState.columns = parseInt(e.target.value);
+    if (appState.columns === 1) {
+      els.shots1Container.classList.remove('hidden');
+      els.shots2Container.classList.add('hidden');
+      
+      // Update state to match selected 1-col option
+      const selected = document.querySelector('input[name="shots1"]:checked').value;
+      appState.totalShots = parseInt(selected);
+    } else {
+      els.shots1Container.classList.add('hidden');
+      els.shots2Container.classList.remove('hidden');
+      
+      // Update state to match selected 2-col option
+      let selected = document.querySelector('input[name="shots2"]:checked');
+      if (!selected) {
+        // default select 6 if none selected
+        els.shots2Radios[0].checked = true;
+        selected = els.shots2Radios[0];
+      }
+      appState.totalShots = parseInt(selected.value);
+    }
+  });
+});
+
+els.shots1Radios.forEach(radio => {
+  radio.addEventListener('change', (e) => {
+    if (appState.columns === 1) {
+      appState.totalShots = parseInt(e.target.value);
+    }
+  });
+});
+
+els.shots2Radios.forEach(radio => {
+  radio.addEventListener('change', (e) => {
+    if (appState.columns === 2) {
+      appState.totalShots = parseInt(e.target.value);
+    }
+  });
 });
 
 // Boot
