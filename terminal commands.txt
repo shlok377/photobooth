@@ -1,0 +1,3 @@
+agy --conversation=19558bed-e14b-46a7-b5bd-7585515a311c
+
+chmod +x start-monitoring && ./start-monitoring
